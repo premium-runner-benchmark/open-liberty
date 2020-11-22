@@ -54,6 +54,7 @@ jobs:
         java-version: 11
         openjdk_impl: openj9
     #### Start stat collection
+    - run: mkdir -p build
     - run: mkdir -p ${{ runner.temp }}/${{ env.artifactsDir }}
     - run: iostat -yxmt 1 > ${{ runner.temp }}/${{ env.iostatFile }} &
     - run: vmstat -n 1 > ${{ runner.temp }}/${{ env.vmstatFile }} &
