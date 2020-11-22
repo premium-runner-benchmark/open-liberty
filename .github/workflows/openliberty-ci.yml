@@ -1,6 +1,7 @@
 name: OpenLiberty CI
 
 on:
+  workflow_dispatch:
   pull_request:
     branches: 
     - integration
@@ -22,7 +23,7 @@ env:
 jobs:
   build:
     name: Build Open Liberty
-    runs-on: ubuntu-latest
+    runs-on: [f2s]
     outputs:
       test-matrix: ${{ steps.gen-params.outputs.test-matrix }}
       test-os: ${{ steps.gen-params.outputs.test-os }}
