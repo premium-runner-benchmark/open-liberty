@@ -45,15 +45,15 @@ jobs:
       ##########################
 
     steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 50
     #### Start stat collection
     - run: mkdir -p ${{ runner.temp }}/${{ env.artifactsDir }}
     - run: iostat -yxmt 1 > ${{ runner.temp }}/${{ env.iostatFile }} &
     - run: vmstat -n 1 > ${{ runner.temp }}/${{ env.vmstatFile }} &
     - run: date -R > ${{ runner.temp }}/${{ env.timingFile }}
     ##########################
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 50
     - name: Set up Java
       uses: joschi/setup-jdk@v2
       with:
