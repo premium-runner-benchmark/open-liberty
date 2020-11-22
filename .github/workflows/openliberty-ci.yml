@@ -21,20 +21,13 @@ on:
 env:
   LANG: en_US.UTF-8
 jobs:
-  build:
+  build: #Main build always done on linix run in parallel to setup and unit-test
     name: Build Open Liberty
-    runs-on: [f64s]
-    outputs:
-      test-matrix: ${{ steps.gen-params.outputs.test-matrix }}
-      test-os: ${{ steps.gen-params.outputs.test-os }}
-      test-java: ${{ steps.gen-params.outputs.test-java }}
+    runs-on: f64s
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 50
-    - name: Validate copyright headers
-      if: "github.event_name == 'pull_request'"
-      run: .github/workflow-scripts/validate-copyright-headers.sh
     - name: Set up Java
       uses: joschi/setup-jdk@v2
       with:
@@ -44,8 +37,16 @@ jobs:
       run: |
         cd dev
         chmod +x gradlew
-        ./gradlew cnf:initialize assemble
+        echo "Building Liberty.  This will take approx. 30 minutes"
+        mkdir gradle && touch build.gradle.log
+        ./gradlew cnf:initialize assemble > gradle/build.gradle.log
         cd .. && zip -rq openliberty-image.zip dev/build.image/wlp/
+    - name: Upload build failure
+      if: failure()
+      uses: actions/upload-artifact@v2
+      with:
+        name: Build failure
+        path: dev/gradle/build.gradle.log
     - name: Upload liberty image
       uses: actions/upload-artifact@v2
       with:
