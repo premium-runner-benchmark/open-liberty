@@ -48,6 +48,10 @@ jobs:
     - run: vmstat -n 1 > ${{ runner.temp }}/${{ env.vmstatFile }} &
     - run: date -R > ${{ runner.temp }}/${{ env.timingFile }}
     ##########################
+    - name: Runner workspace path
+      run: |
+        echo "Cleaning up previous run"
+        rm -rf "${{ github.workspace }}"
     - uses: actions/checkout@v2
       with:
         fetch-depth: 50
