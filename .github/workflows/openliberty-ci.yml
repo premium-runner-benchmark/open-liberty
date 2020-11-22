@@ -28,12 +28,9 @@ jobs:
     strategy:
       matrix:
         test_task: ["check"]
-        runner_type: [ds2v2,ds2v3,ds3v2,ds4v2,ds5v2,f32s,f64s,m5large,m5dlarge,d2asv4,d2dsv4,f2s,f4s]
+        runner_type: [ds2v2,ds2v3,ds3v2,ds4v2,ds5v2,f32s,f64s,m5large,m5dlarge,d2asv4,d2dsv4,f4s]
         #ds2v2,ds2v3,ds3v2,ds4v2,ds5v2,f32s,f64s,m5large,d2asv4,d2dsv4
         debug: ["-DRUBY_DEBUG"]
-    defaults:
-      run:
-        working-directory: build
     
     env:
       #### For stat collection
@@ -45,6 +42,12 @@ jobs:
       ##########################
 
     steps:
+    #### Start stat collection
+    - run: mkdir -p ${{ runner.temp }}/${{ env.artifactsDir }}
+    - run: iostat -yxmt 1 > ${{ runner.temp }}/${{ env.iostatFile }} &
+    - run: vmstat -n 1 > ${{ runner.temp }}/${{ env.vmstatFile }} &
+    - run: date -R > ${{ runner.temp }}/${{ env.timingFile }}
+    ##########################
     - uses: actions/checkout@v2
       with:
         fetch-depth: 50
@@ -53,13 +56,6 @@ jobs:
       with:
         java-version: 11
         openjdk_impl: openj9
-    #### Start stat collection
-    - run: mkdir -p build
-    - run: mkdir -p ${{ runner.temp }}/${{ env.artifactsDir }}
-    - run: iostat -yxmt 1 > ${{ runner.temp }}/${{ env.iostatFile }} &
-    - run: vmstat -n 1 > ${{ runner.temp }}/${{ env.vmstatFile }} &
-    - run: date -R > ${{ runner.temp }}/${{ env.timingFile }}
-    ##########################
     - name: Build with Gradle
       run: |
         cd dev
