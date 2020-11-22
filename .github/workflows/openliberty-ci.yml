@@ -40,18 +40,11 @@ jobs:
         echo "Building Liberty.  This will take approx. 30 minutes"
         mkdir gradle && touch build.gradle.log
         ./gradlew cnf:initialize assemble > gradle/build.gradle.log
-        cd .. && zip -rq openliberty-image.zip dev/build.image/wlp/
+  # cd .. && zip -rq openliberty-image.zip dev/build.image/wlp/
     - name: Upload build failure
       if: failure()
       uses: actions/upload-artifact@v2
       with:
         name: Build failure
         path: dev/gradle/build.gradle.log
-    - name: Upload liberty image
-      uses: actions/upload-artifact@v2
-      with:
-        name: openliberty-image
-        if-no-files-found: error
-        path: openliberty-image.zip
-
       
