@@ -78,10 +78,6 @@ jobs:
         name: perfdata
         path: ${{ runner.temp }}/${{ env.artifactsDir }}
         if-no-files-found: error
-    - name: Runner workspace path
-      run: |
-        echo "Cleaning up previous run"
-        rm -rf "${{ github.workspace }}"
     ##########################
 
   process:
