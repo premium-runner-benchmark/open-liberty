@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         test_task: ["check"]
-        runner_type: [m5large, m5dlarge]
+        runner_type: [c2s4]
         #ds2v2,ds2v3,ds3v2,ds4v2,ds5v2,f32s,f64s,m5large,d2asv4,d2dsv4
         debug: ["-DRUBY_DEBUG"]
     
