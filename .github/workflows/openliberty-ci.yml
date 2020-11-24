@@ -72,7 +72,7 @@ jobs:
         path: dev/gradle/build.gradle.log
     #### Collect/upload stats
     - run: date -R >> ${{ runner.temp }}/${{ env.timingFile }}
-    - run: kill $(jobs -p)
+    - run: pkill iostat && pkill vmstat
       name: Kill the data collection jobs
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
